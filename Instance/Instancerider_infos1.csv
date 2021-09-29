@@ -1,0 +1,7 @@
+name,start time,speed,end,capacity,freedom,order_select_type,wait_para,uncertainty,exp_error
+0,0,3,120,1,True,simple,False,True,1.5
+1,2,3,122,1,True,simple,False,True,1.5
+2,4,3,124,1,True,simple,False,True,1.5
+3,6,3,126,1,True,simple,False,True,1.5
+4,8,3,128,1,True,simple,False,True,1.5
+5,10,3,130,1,True,simple,False,True,1.5
