@@ -339,9 +339,12 @@ def UpdatePlatformByOrderSelection(platform, order_index):
             duplicate_customers = list(set(order.customers).intersection(compare_order.customers))
             if len(duplicate_customers) > 0:
                 delete_order_index.append(compare_order.index)
+    print('지우기 이전 {}'.format(platform.platform.keys()))
+    print('삭제 index {}/ 삭제할 {}'.format(order_index, delete_order_index))
     for order_index in delete_order_index:
         del platform.platform[order_index]
-
+    del platform.platform[order_index]
+    print('지우기 이후 {}'.format(platform.platform.keys()))
 
 def ActiveRiderCalculator(rider, t_now = 0, option = None, interval = 5):
     """
@@ -354,7 +357,7 @@ def ActiveRiderCalculator(rider, t_now = 0, option = None, interval = 5):
             if len(rider.picked_orders) < rider.max_order_num:
                 print('문구1/ 라이더 {} / 현재 OnHandOrder# {} / 최대 주문 수{} / 예상 선택 시간 {} / 다음 interval 시간 {}'.format(rider.name,len(rider.picked_orders), rider.max_order_num, round(rider.next_select_t,2), t_now + interval))
                 return True
-        else:
+        else: #w 계산 시 고려 필요
             if len(rider.picked_orders) <= rider.max_order_num and t_now <= rider.next_select_t <= t_now + interval:
                 print('문구2/ 라이더 {} / 현재 OnHandOrder# {} / 최대 주문 수{} / 예상 선택 시간 {} / 다음 interval 시간 {}'.format(rider.name,len(rider.picked_orders), rider.max_order_num, round(rider.next_select_t,2), t_now + interval))
                 return True

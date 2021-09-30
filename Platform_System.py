@@ -24,7 +24,7 @@ def Platform_process4(env, platform_set, orders, riders, stores, p2,thres_p,inte
                 considered_customers_names, interval_orders = CountUnpickedOrders(orders, now_t, interval = interval,  return_type='name')
             print('탐색 대상 고객들 {}'.format(considered_customers_names))
             active_rider_names = CountActiveRider(riders, interval, min_pr=min_pr, t_now=now_t)
-            weight2 = WeightCalculator(riders, active_rider_names)
+            weight2 = WeightCalculator(riders, active_rider_names) #todo: WeightCalculator가 신뢰할 만한 값을 주고 있는가?
             w_list = list(weight2.values())
             try:
                 input('T {} / 대상 라이더 수 {}/시나리오 수 {} 중 {} / w평균 {} /w표준편차 {}'.format(now_t, len(active_rider_names),math.factorial(len(active_rider_names)),len(weight2), np.average(w_list),np.std(w_list)))
@@ -61,7 +61,7 @@ def Platform_process4(env, platform_set, orders, riders, stores, p2,thres_p,inte
             if len(B) > 0:
                 if scoring_type == 'myopic':
                     print('정렬 정보{}'.format(B))
-                    B.sort(key = operator.itemgetter(6)) #todo : search index 확인
+                    B.sort(key = operator.itemgetter(6))
                 else:
                     B = ParetoDominanceCount(B, 0, 8, 9, 10, strict_option = False)
                 #Part 2 -1 Greedy한 방식으로 선택
@@ -83,14 +83,11 @@ def Platform_process4(env, platform_set, orders, riders, stores, p2,thres_p,inte
                     feasiblity, unique_bundles = Bundle_selection_problem2(B)
                     print('결과확인 {} : {}'.format(feasiblity, unique_bundles))
             #part 3 Upload P
-            #todo : PlatformOrderRevise 를 손볼 것.
             new_orders = PlatformOrderRevise4(unique_bundles, orders, platform_set, now_t = now_t, unserved_bundle_order_break = unserved_bundle_order_break, divide_option = divide_option)
             platform_set.platform = new_orders
         else:
-            print('ELSE 문 실행')
             org_bundle_num, rev_bundle_num = RequiredBreakBundleNum(platform_set, lamda2, mu1, mu2, thres=thres_p)
             if sum(rev_bundle_num) < sum(org_bundle_num):
                 break_info = [org_bundle_num[0] - rev_bundle_num[0],org_bundle_num[1] - rev_bundle_num[1]] #[B2 해체 수, B3 해체 수]
                 platform_set.platform = BreakBundle(break_info, platform_set, orders)
-        print('T: {} B2,B3확인'.format(int(env.now)))
         yield env.timeout(interval)
